@@ -4,10 +4,17 @@ export const Success = res => {
     switch(res.status) {
         case 200:
             toast.success(res.data.message);
+            // setTimeout(function(){ 
+            //     window.location.reload();
+            // }, 500);
+
         break;
 
         case 201:
             toast.success(res.data.message);
+            // setTimeout(function(){ 
+            //     window.location.reload();
+            // }, 500);
         break;
     }
 }

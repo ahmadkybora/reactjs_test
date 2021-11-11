@@ -6,8 +6,16 @@ class Lesson extends Component {
 
     state = {
         displayForm: false,
-        lessons : this.props.student.lessons,
+        lessons : [],
         number: {}
+    }
+
+    componentDidMount() {
+        //console.log(this.props.student);
+        const { lessons } = this.props.student;
+        this.setState({ lessons });
+        //console.log(lessons)
+        // console.log(this.props.student.lessons)
     }
 
     option = ( lesson, label, type ) => {
@@ -31,7 +39,7 @@ class Lesson extends Component {
         //console.log(lesson);
         const { displayForm, lessons, number } = this.state;
         const lessonId = lessons.find(l => ( l.id === lesson.id));
-        //console.log(lessonId);
+        console.log(lessonId);
         this.setState({ 
             number: lessonId, 
             displayForm: displayForm ? false : true,
@@ -79,7 +87,7 @@ class Lesson extends Component {
                                 <td>{lesson.lesson_name}</td>
                                 <td>{lesson.lesson_code}</td>
                                 <td>{lesson.number_unit}</td>
-                                <td>{lesson.pivot.number}</td>
+                                <td>{lesson.number}</td>
                                 <td>
                                     {this.option(lesson, "fa fa-edit text-primary m-1", "edit")}
                                     {this.option(lesson, "fa fa-trash text-danger m-1", "delete")}

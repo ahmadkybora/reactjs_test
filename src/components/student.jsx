@@ -29,14 +29,14 @@ class Student extends Component {
         const { displayForm, style, students } = this.state;
         const studentId = students.find(s => ( s.id === student.id));
         //console.log(studentId);
-        let close = "fa fa-close text-danger";
-        let plus = "fa fa-arrow-right text-success";
+        // let close = "fa fa-close text-danger";
+        // let plus = "fa fa-arrow-right text-success";
 
         this.setState({ 
             edit: true, 
             displayForm: displayForm ? false : true, 
             status: true, 
-            style: ( style === plus ) ? close : plus,
+            //style: ( style === plus ) ? close : plus,
             student: studentId
         });
     }
@@ -52,9 +52,17 @@ class Student extends Component {
         // console.log(e.target.lessonName.value);
         // console.log(this.state.student);
 
+        //const std = e.target.std.value;
+        //const id = e.target.getAttribute("data-id");
+        //alternate to getAttribute
+        //console.log(e.target.getAttribute("data-id"))
+       // console.log(e.target.std.value);
+        // console.log(e.target.number.value);
+        // const std = e.target.std.value;
+        // console.log(std);
         makeNumber.number = e.target.number.value;
         makeNumber.lessonId = e.target.lessonId.value;
-        makeNumber.studentId = 1;
+        makeNumber.studentId = e.target.std.value;
 
         this.setState({ makeNumber });
 
@@ -115,11 +123,17 @@ class Student extends Component {
                             <td>{student.first_name + ' ' + student.last_name}</td>
                             <td>{student.student_code}</td>
                             <td>{student.total_unit ? student.total_unit : 'Dont Have !'}</td>
-                            <td>{student.total_unit ? student.total_unit : 'Dont Have !'}</td>
+                            <td>
+                                {student.lessons.map((l, index)}
+                            </td>
                             <td>
                                 <form onSubmit={this.createNumber}>
                                     <div className="input-group offset-2">
                                         <button 
+                                            id="std" 
+                                            name="std"
+                                            // data-id={student.id}
+                                            value={student.id}
                                             className="btn btn-success">
                                             <i className="fa fa-send-o"></i>
                                             send
