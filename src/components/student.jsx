@@ -122,10 +122,8 @@ class Student extends Component {
                             </td>
                             <td>{student.first_name + ' ' + student.last_name}</td>
                             <td>{student.student_code}</td>
-                            <td>{student.total_unit ? student.total_unit : 'Dont Have !'}</td>
-                            <td>
-                                {student.lessons.map((l, index)}
-                            </td>
+                            <td>{student.total_units ? student.total_units : 'Dont Have !'}</td>
+                            <td>{student.total_units ? Math.round(student.total_number_units / parseInt(student.total_units)) : 'Dont Have !'}</td>
                             <td>
                                 <form onSubmit={this.createNumber}>
                                     <div className="input-group offset-2">
