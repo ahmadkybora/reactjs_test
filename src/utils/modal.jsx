@@ -5,7 +5,6 @@ class Modal extends Component {
 
     state = {
         number: {},
-        //onChangeNumber: this.onChangeNumber.bind(this),
     }
 
     componentDidMount() {
@@ -22,22 +21,12 @@ class Modal extends Component {
         this.setState({ number });
         console.log(number);
         
-        // const { number } = this.state;
-        //console.log(this.props.number);
-        // number = e.target.number.value
-        // this.setState({ number });
-
         return await lessonUpdate(number)
     }
 
-    // onChangeNumber = e => {
-    //     const number = e.target.number.value;
-    //     console.log(number);
-    // }
-
     render() { 
         const { number } = this.state
-        //console.log(number)
+
         return (
             <div>
                 <button type="button" className="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
@@ -65,7 +54,6 @@ class Modal extends Component {
                                         id="number" 
                                         name="number"
                                         defaultValue={number.number}
-                                        // onChange={this.onChangeNumber}
                                     />
                                 </div>
                             </div>

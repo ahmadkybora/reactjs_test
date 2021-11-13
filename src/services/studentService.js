@@ -10,5 +10,10 @@ export const getAllStudents = async () => {
 export const createNumber = async student => {
     return await http.post(`students/${student.studentId}`, student)
         .then(res => Success(res))
+        .then(() => {
+            setTimeout(function(){ 
+                window.location.reload();
+            }, 1000);
+        })
         .catch(err => Error(err));
 }

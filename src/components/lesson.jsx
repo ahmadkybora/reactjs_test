@@ -1,21 +1,22 @@
 import Modal from '../utils/modal';
 import React, { Component } from 'react';
-import { lessonDelete } from '../services/lessonService';
+import { lessonDelete, lessonUpdate } from '../services/lessonService';
 
 class Lesson extends Component {
 
     state = {
         displayForm: false,
+        //display: false,
         lessons : [],
-        number: {}
+        score: {}
     }
 
     componentDidMount() {
-        //console.log(this.props.student);
         const { lessons } = this.props.student;
-        this.setState({ lessons });
-        //console.log(lessons)
-        // console.log(this.props.student.lessons)
+        const displayForm = this.props.displayForm;
+        //console.log(displayForm);
+        this.setState({ lessons, displayForm });
+        //console.log(displayForm)
     }
 
     option = ( lesson, label, type ) => {
@@ -36,47 +37,86 @@ class Lesson extends Component {
     }
 
     editLesson = lesson => {
-        //console.log(lesson);
-        const { displayForm, lessons, number } = this.state;
-        const lessonId = lessons.find(l => ( l.id === lesson.id));
-        console.log(lessonId);
-        this.setState({ 
-            number: lessonId, 
-            displayForm: displayForm ? false : true,
-        });
+        const { displayForm, lessons, score } = this.state;
 
-        //console.log(number)
+        const lessonId = lessons.find(l => ( l.id === lesson.id));
+        this.setState({ 
+            score: lessonId, 
+            //displayForm: displayForm ? false : true,
+        });
+    }
+
+    updateNumber = async e => {
+        e.preventDefault();
+
+        const { score } = this.state
+        const numberValue = e.target.score.value;
+        score.score = numberValue;
+        this.setState({ score });
+
+        return await lessonUpdate(score)
     }
 
     deleteLesson = async lesson => {
-        //console.log(this.state.lessons);
-        //console.log(lesson)
         this.setState({ lessons: this.state.lessons.filter((lId) => { 
                 return lId !== lesson 
             })
         });
 
-    // return await deleteUser(user);
-    //     const { lessons } = this.state;
-    //     this.setState({ lessons: lessons.filter(s => s.id !== lesson.id)})
-
         return await lessonDelete(lesson);
     }
 
+    colseBox = displayForm => {
+        this.setState({ displayForm: displayForm ? false : true });
+        console.log(this.state.displayForm);
+    }
+
     render() { 
-        const { lessons, displayForm, number } = this.state;
-        //console.log(lessons);
+        const { lessons, displayForm, score } = this.state;
+
         return (
-            <div>
-                {displayForm ? <Modal number={number} /> : ''}
+            <div className="mt-3">
+                {/* {displayForm ? <Modal number={number} /> : ''} */}
+                {/* <i onClick={() => this.colseBox(displayForm)} class="fa fa-window-close text-danger float-end" aria-hidden="true" /> */}
+                <div className="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div className="modal-dialog">
+                        <div className="modal-content">
+                        <div className="modal-header">
+                            <h5 className="modal-title" id="staticBackdropLabel">Edit Number Lesson</h5>
+                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div className="modal-body">
+                        <form onSubmit={this.updateNumber.bind(this)}>
+                            <div className="input-group offset-3">
+                                <button 
+                                    className="btn btn-success">
+                                    <i className="fa fa-send-o"></i>
+                                    send
+                                </button>
+                                <div className="form-outline">
+                                    <input 
+                                        type="number" 
+                                        className="form-control" 
+                                        id="score" 
+                                        name="score"
+                                        defaultValue={score.score}
+                                    />
+                                </div>
+                            </div>
+                        </form>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+<hr />
                 <table className="table table-striped">
                     <thead className="text-center">
                         <tr className="text-center">
                             <th>#</th>
                             <th>Lesson Name</th>
                             <th>Lesson Code</th>
-                            <th>Number Of Unit</th>
-                            <th>Number</th>
+                            <th>Unit</th>
+                            <th>Score</th>
                             <th>Option</th> 
                         </tr>
                     </thead>
@@ -86,10 +126,16 @@ class Lesson extends Component {
                                 <td>{index+1}</td>
                                 <td>{lesson.lesson_name}</td>
                                 <td>{lesson.lesson_code}</td>
-                                <td>{lesson.number_unit}</td>
-                                <td>{lesson.number}</td>
+                                <td>{lesson.units}</td>
+                                <td>{lesson.score}</td>
                                 <td>
-                                    {this.option(lesson, "fa fa-edit text-primary m-1", "edit")}
+                                    <i 
+                                        onClick={() => this.editLesson(lesson)} 
+                                        className="fa fa-edit text-primary m-1" 
+                                        data-bs-toggle="modal" 
+                                        data-bs-target="#staticBackdrop" 
+                                    />
+                                    {/* {this.option(lesson, "fa fa-edit text-primary m-1", "edit")} */}
                                     {this.option(lesson, "fa fa-trash text-danger m-1", "delete")}
                                 </td>
                             </tr>

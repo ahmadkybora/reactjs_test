@@ -8,15 +8,23 @@ export const getAllLessons = async () => {
 }
 
 export const lessonUpdate = async lesson => {
-    //console.log(lesson.lesson_id);
     return await http.patch(`lessons/${lesson.lesson_id}`, lesson)
         .then(res => Success(res))
+        .then(() => {
+            setTimeout(function(){ 
+                window.location.reload();
+            }, 1000);
+        })
         .catch(err => Error(err));
 }
 
 export const lessonDelete = async lesson => {
-    //console.log(lesson.id);
     return await http.post(`lessons/${lesson.id}`, lesson)
         .then(res => Success(res))
+        .then(() => {
+            setTimeout(function(){ 
+                window.location.reload();
+            }, 1000);
+        })
         .catch(err => Error(err));
 }

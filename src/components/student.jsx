@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Link, NavLink } from 'react-router-dom';
 import { getAllStudents, createNumber } from '../services/studentService';
 import { getAllLessons } from '../services/lessonService';
 import Lesson from './lesson';
@@ -10,10 +9,10 @@ class Student extends Component {
         students: [],
         lessons: [],
         displayForm: false,
-        style: "fa fa-arrow-right text-success",
+        style: "fa fa-plus text-success",
         student: {},
         makeNumber: {
-            number: '',
+            score: '',
             lessonId: '',
             studentId: ''
         }
@@ -28,58 +27,32 @@ class Student extends Component {
     showLesson = student => {
         const { displayForm, style, students } = this.state;
         const studentId = students.find(s => ( s.id === student.id));
-        //console.log(studentId);
-        // let close = "fa fa-close text-danger";
-        // let plus = "fa fa-arrow-right text-success";
 
         this.setState({ 
             edit: true, 
             displayForm: displayForm ? false : true, 
+            box: {},
             status: true, 
-            //style: ( style === plus ) ? close : plus,
-            student: studentId
+            student: studentId,
+            //style: 'disabled'
         });
+
+        //console.log(studentId.id);
     }
     
     createNumber = async e => {
-        //e.preventDefault();
         e.preventDefault();
-        const { makeNumber } = this.state;
-        //const { lessonNumber, password } = e.target.elements
-        //this.handleChange(e)
-        //payload.first_name = e.target.number.value;
-        // console.log(e.target.lessonNumber.value);
-        // console.log(e.target.lessonName.value);
-        // console.log(this.state.student);
 
-        //const std = e.target.std.value;
-        //const id = e.target.getAttribute("data-id");
-        //alternate to getAttribute
-        //console.log(e.target.getAttribute("data-id"))
-       // console.log(e.target.std.value);
-        // console.log(e.target.number.value);
-        // const std = e.target.std.value;
-        // console.log(std);
-        makeNumber.number = e.target.number.value;
+        const { makeNumber } = this.state;
+
+        makeNumber.score = e.target.score.value;
         makeNumber.lessonId = e.target.lessonId.value;
         makeNumber.studentId = e.target.std.value;
 
         this.setState({ makeNumber });
 
         return await createNumber(makeNumber);
-        //console.log(e.target.elements.lessonNumber);
-        // const { number } = this.state;
-
-        // number.number = e.target.value.number;
-        // number.student = e.target.value.student;
-        // console.log(number);
-        //number.lesson = e.target.value.
     }
-
-    // handleChange = e => {
-    //     const name = e.target.value;
-    //     console.log(name)
-    // }
 
     render() { 
         const { students, student, edit, displayForm, lessons, makeNumber } = this.state;
@@ -93,7 +66,7 @@ class Student extends Component {
                 <div className="col-md-3">
                 </div>
             </div>
-            {displayForm ? <Lesson student={student} /> : ''}
+            {/* {displayForm ? <Lesson student={student} displayForm={displayForm}/> : ''} */}
             <table className="table table-striped">
                 <thead className="text-center">
                     <tr className="text-center">
@@ -103,7 +76,7 @@ class Student extends Component {
                         <th>Std Code</th>
                         <th>Total Unit</th>
                         <th>Avg</th>
-                        <th>Lessons and Number</th>
+                        <th>Lessons and Scores</th>
                     </tr>
                 </thead>
                 <tbody className="text-center">
@@ -119,6 +92,11 @@ class Student extends Component {
                                     onClick={() => {this.showLesson(student)}}>
                                     <i className={this.state.style} />
                                 </button>
+                                {displayForm ? 
+                                 <tr height="150px">
+                                    <Lesson student={student} displayForm={displayForm}/>
+                                 </tr> 
+                                 : ''}
                             </td>
                             <td>{student.first_name + ' ' + student.last_name}</td>
                             <td>{student.student_code}</td>
@@ -130,20 +108,18 @@ class Student extends Component {
                                         <button 
                                             id="std" 
                                             name="std"
-                                            // data-id={student.id}
                                             value={student.id}
                                             className="btn btn-success">
                                             <i className="fa fa-send-o"></i>
                                             send
                                         </button>
-                                        <div className="form-outline col-md-3">
+                                        <div className="form-outline col-md-4">
                                             <input 
                                                 type="number" 
                                                 className="form-control" 
-                                                id="number" 
-                                                name="number"
-                                                // value={makeNumber.lessonNumber}
-                                                // onChange={this.handleChange}
+                                                id="score" 
+                                                name="score"
+                                                placeholder="Enter the score"
                                             />
                                         </div>
                                         <div className="col-md-4">
@@ -151,9 +127,8 @@ class Student extends Component {
                                                 className="form-select"
                                                 id="lessonId"
                                                 name="lessonId"
-                                                // value={makeNumber.lessonName}
-                                                // onChange={this.handleChange}
                                             >
+                                            <option selected="true" disabled="disabled">Choose a lesson</option>     
                                             {lessons.map(lesson => ( 
                                                 <option value={lesson.id}>{lesson.lesson_name}</option>
                                             ))}
@@ -166,6 +141,97 @@ class Student extends Component {
                     ))}
                 </tbody>
             </table>
+
+            {/* <table class="table table-striped">
+                <thead className="text-center">
+                    <tr className="text-center">
+                        <th>#</th>
+                        <th>Option</th> 
+                        <th>FullName</th>
+                        <th>Std Code</th>
+                        <th>Total Unit</th>
+                        <th>Avg</th>
+                        <th>Lessons and Scores</th>
+                    </tr>
+                </thead>
+            <tbody>
+                ...
+                <tr>
+                    <td>1</td>
+                    <td>2</td>
+                    <td>3</td>
+                    <td colspan="4">
+                        <table class="table table-striped table mb-0">
+                            <thead className="text-center">
+                                <tr className="text-center">
+                                    <th>#</th>
+                                    <th>Option</th> 
+                                    <th>FullName</th>
+                                    <th>Std Code</th>
+                                    <th>Total Unit</th>
+                                    <th>Avg</th>
+                                    <th>Lessons and Scores</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>2</td>
+                                    <td>3</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                ...
+            </tbody>
+            </table> */}
+
+            {/* <table class="table table-striped">
+                <thead>
+                    ...
+                </thead>
+                <tbody>
+                    ...
+                    <tr>
+                    <td colspan="4">
+                        <table class="table mb-0">
+                        ...
+                        </table>
+                    </td>
+                    </tr>
+                    ...
+                </tbody>
+            </table> */}
+
+            {/* <table className="table table-striped table-bordered table-hover">
+                <tr>
+                    <td>Row 1</td>
+                </tr>
+                <tr>
+                    <td>Row 2</td>
+                </tr>
+                <tr>
+                    <td>
+                    <table className="table table-striped table-bordered table-hover">
+                            <tr>
+                                <td>Nested 1a</td>
+                                <td>Nested 2a</td>
+                                <td>Nested 3a</td>
+                            </tr>
+                            <tr>
+                                <td>Nested 1b</td>
+                                <td>Nested 2b</td>
+                                <td>Nested 3b</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Row 3</td>
+                </tr>
+            </table> */}
+
         </div>
         )
     }
