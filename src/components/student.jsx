@@ -57,6 +57,16 @@ class Student extends Component {
     render() { 
         const { students, student, edit, displayForm, lessons, makeNumber } = this.state;
 
+        const myTable = {
+            // color: "white",
+            // backgroundColor: "DodgerBlue",
+            // padding: "10px",
+            // marginTop: '40px',
+            // fontFamily: "Arial",
+            // height: '300px',
+            // width: '300px'
+        };
+
         return (
             <div className="container">
             <div className="row">
@@ -67,7 +77,7 @@ class Student extends Component {
                 </div>
             </div>
             {/* {displayForm ? <Lesson student={student} displayForm={displayForm}/> : ''} */}
-            <table className="table table-striped">
+            <table style={myTable} className="table table-striped">
                 <thead className="text-center">
                     <tr className="text-center">
                         <th>#</th>

@@ -73,9 +73,18 @@ class Lesson extends Component {
 
     render() { 
         const { lessons, displayForm, score } = this.state;
+        const myTable = {
+            // color: "white",
+            // backgroundColor: "DodgerBlue",
+            padding: "10px",
+            marginTop: '40px',
+            // fontFamily: "Arial",
+            height: '200px',
+            width: '1000px'
+        };
 
         return (
-            <div className="mt-3">
+            <div>
                 {/* {displayForm ? <Modal number={number} /> : ''} */}
                 {/* <i onClick={() => this.colseBox(displayForm)} class="fa fa-window-close text-danger float-end" aria-hidden="true" /> */}
                 <div className="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -108,8 +117,8 @@ class Lesson extends Component {
                         </div>
                     </div>
                 </div>
-<hr />
-                <table className="table table-striped">
+
+                <table style={myTable} className="table table-striped">
                     <thead className="text-center">
                         <tr className="text-center">
                             <th>#</th>
