@@ -1,4 +1,3 @@
-import Modal from '../utils/modal';
 import React, { Component } from 'react';
 import { lessonDelete, lessonUpdate } from '../services/lessonService';
 
@@ -6,7 +5,6 @@ class Lesson extends Component {
 
     state = {
         displayForm: false,
-        //display: false,
         lessons : [],
         score: {}
     }
@@ -14,9 +12,7 @@ class Lesson extends Component {
     componentDidMount() {
         const { lessons } = this.props.student;
         const displayForm = this.props.displayForm;
-        //console.log(displayForm);
         this.setState({ lessons, displayForm });
-        //console.log(displayForm)
     }
 
     option = ( lesson, label, type ) => {
@@ -37,12 +33,11 @@ class Lesson extends Component {
     }
 
     editLesson = lesson => {
-        const { displayForm, lessons, score } = this.state;
+        const { lessons } = this.state;
 
         const lessonId = lessons.find(l => ( l.id === lesson.id));
         this.setState({ 
             score: lessonId, 
-            //displayForm: displayForm ? false : true,
         });
     }
 
@@ -66,32 +61,16 @@ class Lesson extends Component {
         return await lessonDelete(lesson);
     }
 
-    colseBox = displayForm => {
-        this.setState({ displayForm: displayForm ? false : true });
-        console.log(this.state.displayForm);
-    }
-
     render() { 
-        const { lessons, displayForm, score } = this.state;
-        const myTable = {
-            // color: "white",
-            // backgroundColor: "DodgerBlue",
-            padding: "10px",
-            marginTop: '40px',
-            // fontFamily: "Arial",
-            height: '200px',
-            width: '1000px'
-        };
+        const { lessons, score } = this.state;
 
         return (
             <div>
-                {/* {displayForm ? <Modal number={number} /> : ''} */}
-                {/* <i onClick={() => this.colseBox(displayForm)} class="fa fa-window-close text-danger float-end" aria-hidden="true" /> */}
                 <div className="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                     <div className="modal-dialog">
                         <div className="modal-content">
                         <div className="modal-header">
-                            <h5 className="modal-title" id="staticBackdropLabel">Edit Number Lesson</h5>
+                            <h5 className="modal-title" id="staticBackdropLabel">Edit Score Lesson</h5>
                             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div className="modal-body">
@@ -118,7 +97,7 @@ class Lesson extends Component {
                     </div>
                 </div>
 
-                <table style={myTable} className="table table-striped">
+                <table className="table table-striped">
                     <thead className="text-center">
                         <tr className="text-center">
                             <th>#</th>
@@ -131,7 +110,7 @@ class Lesson extends Component {
                     </thead>
                     <tbody className="text-center">
                         {lessons.map((lesson, index) => (
-                            <tr key={lesson.id} className="text-center">
+                            <tr key={lesson.id}>
                                 <td>{index+1}</td>
                                 <td>{lesson.lesson_name}</td>
                                 <td>{lesson.lesson_code}</td>
@@ -144,7 +123,6 @@ class Lesson extends Component {
                                         data-bs-toggle="modal" 
                                         data-bs-target="#staticBackdrop" 
                                     />
-                                    {/* {this.option(lesson, "fa fa-edit text-primary m-1", "edit")} */}
                                     {this.option(lesson, "fa fa-trash text-danger m-1", "delete")}
                                 </td>
                             </tr>

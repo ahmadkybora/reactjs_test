@@ -8,7 +8,6 @@ class Student extends Component {
     state = {
         students: [],
         lessons: [],
-        displayForm: false,
         style: "fa fa-plus text-success",
         student: {},
         makeNumber: {
@@ -21,23 +20,20 @@ class Student extends Component {
     async componentDidMount() {
         const lessons = await getAllLessons();
         const students = await getAllStudents();
+        const displayForm = false;
+        students.map(s => s.displayForm = displayForm)
         this.setState({ students, lessons });
     }
 
     showLesson = student => {
-        const { displayForm, style, students } = this.state;
+        const { students } = this.state;
         const studentId = students.find(s => ( s.id === student.id));
+        studentId.displayForm = studentId.displayForm ? false : true;
 
         this.setState({ 
-            edit: true, 
-            displayForm: displayForm ? false : true, 
-            box: {},
             status: true, 
             student: studentId,
-            //style: 'disabled'
         });
-
-        //console.log(studentId.id);
     }
     
     createNumber = async e => {
@@ -55,17 +51,52 @@ class Student extends Component {
     }
 
     render() { 
-        const { students, student, edit, displayForm, lessons, makeNumber } = this.state;
+        const { students, student, lessons, style } = this.state;
 
-        const myTable = {
-            // color: "white",
-            // backgroundColor: "DodgerBlue",
-            // padding: "10px",
-            // marginTop: '40px',
-            // fontFamily: "Arial",
-            // height: '300px',
-            // width: '300px'
-        };
+        const myTableThead = {
+            textAlign: student.displayForm ? "center" : '',
+            float: student.displayForm ? 'left' : '',
+        }
+
+        const myTableThSmall = {
+            width: student.displayForm ? '130px' : '',
+            textAlign: student.displayForm ? "center" : "",
+        }
+
+        const myTableThMid = {
+            width: student.displayForm ? '170px' : '',
+            textAlign: student.displayForm ? "center" : "",
+        }
+
+        const myTableThBig = {
+            width: student.displayForm ? '400px' : '',
+            textAlign: student.displayForm ? "center" : "",
+        }
+
+        const myTableTbody = {
+            float: student.displayForm ? 'left' : '',
+            textAlign: student.displayForm ? "center" : "",
+        }
+
+        const myTableTr = {
+            float: student.displayForm ? 'left' : '',
+            textAlign: student.displayForm ? "center" : "",
+        }
+
+        const myTableTdSmall = {
+            width: student.displayForm ? '130px' : '',
+            textAlign: student.displayForm ? "center" : "",
+        }
+
+        const myTableTdMid = {
+            width: student.displayForm ? '170px' : '',
+            textAlign: student.displayForm ? "center" : "",
+        }
+
+        const myTableTdBig = {
+            width: student.displayForm ? '400px' : '',
+            textAlign: student.displayForm ? "center" : "",
+        }
 
         return (
             <div className="container">
@@ -76,45 +107,42 @@ class Student extends Component {
                 <div className="col-md-3">
                 </div>
             </div>
-            {/* {displayForm ? <Lesson student={student} displayForm={displayForm}/> : ''} */}
-            <table style={myTable} className="table table-striped">
-                <thead className="text-center">
-                    <tr className="text-center">
+            
+            <table className="table table-bordered">
+                <thead style={myTableThead} className="text-center">
+                    <tr>
                         <th>#</th>
-                        <th>Option</th> 
-                        <th>FullName</th>
-                        <th>Std Code</th>
-                        <th>Total Unit</th>
-                        <th>Avg</th>
-                        <th>Lessons and Scores</th>
+                        <th style={myTableThSmall}>Option</th> 
+                        <th style={myTableThMid}>FullName</th>
+                        <th style={myTableThSmall}>Std Code</th>
+                        <th style={myTableThSmall}>Total Unit</th>
+                        <th style={myTableThSmall}>Avg</th>
+                        <th style={myTableThBig}>Lessons and Scores</th>
                     </tr>
                 </thead>
-                <tbody className="text-center">
+                <tbody style={myTableTbody} className="text-center">
                     {students.map((student, index) => (
-                        <tr 
+                        <React.Fragment>
+                        <tr
+                            style={myTableTr}
                             key={student.id} 
                             data-id={student.id}
-                            className="text-center">
+                        >
                             <td>{index+1}</td>
-                            <td>
+                            <td style={myTableTdSmall}>
                                 <button 
-                                    className="btn btn-default float-end"
+                                    className="btn btn-sm btn-default"
                                     onClick={() => {this.showLesson(student)}}>
-                                    <i className={this.state.style} />
+                                    <i className={style} />
                                 </button>
-                                {displayForm ? 
-                                 <tr height="150px">
-                                    <Lesson student={student} displayForm={displayForm}/>
-                                 </tr> 
-                                 : ''}
                             </td>
-                            <td>{student.first_name + ' ' + student.last_name}</td>
-                            <td>{student.student_code}</td>
-                            <td>{student.total_units ? student.total_units : 'Dont Have !'}</td>
-                            <td>{student.total_units ? Math.round(student.total_number_units / parseInt(student.total_units)) : 'Dont Have !'}</td>
-                            <td>
+                            <td style={myTableTdMid}>{student.first_name + ' ' + student.last_name}</td>
+                            <td style={myTableTdSmall}>{student.student_code}</td>
+                            <td style={myTableTdSmall}>{student.total_units ? student.total_units : 'Dont Have !'}</td>
+                            <td style={myTableTdSmall}>{student.total_units ? Math.round(student.total_number_units / parseInt(student.total_units)) : 'Dont Have !'}</td>
+                            <td style={myTableTdBig}>
                                 <form onSubmit={this.createNumber}>
-                                    <div className="input-group offset-2">
+                                    <div className="input-group offset-1">
                                         <button 
                                             id="std" 
                                             name="std"
@@ -148,100 +176,17 @@ class Student extends Component {
                                 </form>
                             </td>
                         </tr>
+                        {student.displayForm ? 
+                            <tr>
+                                <td style={{ width: "1200px" }}>
+                                    <Lesson student={student} />
+                                </td>
+                            </tr>
+                        : ''}
+                        </React.Fragment>
                     ))}
                 </tbody>
             </table>
-
-            {/* <table class="table table-striped">
-                <thead className="text-center">
-                    <tr className="text-center">
-                        <th>#</th>
-                        <th>Option</th> 
-                        <th>FullName</th>
-                        <th>Std Code</th>
-                        <th>Total Unit</th>
-                        <th>Avg</th>
-                        <th>Lessons and Scores</th>
-                    </tr>
-                </thead>
-            <tbody>
-                ...
-                <tr>
-                    <td>1</td>
-                    <td>2</td>
-                    <td>3</td>
-                    <td colspan="4">
-                        <table class="table table-striped table mb-0">
-                            <thead className="text-center">
-                                <tr className="text-center">
-                                    <th>#</th>
-                                    <th>Option</th> 
-                                    <th>FullName</th>
-                                    <th>Std Code</th>
-                                    <th>Total Unit</th>
-                                    <th>Avg</th>
-                                    <th>Lessons and Scores</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>2</td>
-                                    <td>3</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </td>
-                </tr>
-                ...
-            </tbody>
-            </table> */}
-
-            {/* <table class="table table-striped">
-                <thead>
-                    ...
-                </thead>
-                <tbody>
-                    ...
-                    <tr>
-                    <td colspan="4">
-                        <table class="table mb-0">
-                        ...
-                        </table>
-                    </td>
-                    </tr>
-                    ...
-                </tbody>
-            </table> */}
-
-            {/* <table className="table table-striped table-bordered table-hover">
-                <tr>
-                    <td>Row 1</td>
-                </tr>
-                <tr>
-                    <td>Row 2</td>
-                </tr>
-                <tr>
-                    <td>
-                    <table className="table table-striped table-bordered table-hover">
-                            <tr>
-                                <td>Nested 1a</td>
-                                <td>Nested 2a</td>
-                                <td>Nested 3a</td>
-                            </tr>
-                            <tr>
-                                <td>Nested 1b</td>
-                                <td>Nested 2b</td>
-                                <td>Nested 3b</td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Row 3</td>
-                </tr>
-            </table> */}
-
         </div>
         )
     }
