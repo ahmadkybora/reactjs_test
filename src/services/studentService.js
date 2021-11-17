@@ -13,7 +13,7 @@ export const createNumber = async student => {
         .then(() => {
             setTimeout(function(){ 
                 window.location.reload();
-            }, 1000);
+            }, 1500);
         })
         .catch(err => Error(err));
 }

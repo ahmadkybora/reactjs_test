@@ -8,7 +8,6 @@ class Student extends Component {
     state = {
         students: [],
         lessons: [],
-        style: "fa fa-plus text-success",
         student: {},
         makeNumber: {
             score: '',
@@ -21,17 +20,24 @@ class Student extends Component {
         const lessons = await getAllLessons();
         const students = await getAllStudents();
         const displayForm = false;
-        students.map(s => s.displayForm = displayForm)
+        const style = "fa fa-plus text-success";
+        students.map(s => {
+            s.displayForm = displayForm; 
+            s.style = style
+        })
         this.setState({ students, lessons });
     }
 
     showLesson = student => {
         const { students } = this.state;
+
+        let plus = "fa fa-plus text-success";
+        let close = "fa fa-close text-danger";
         const studentId = students.find(s => ( s.id === student.id));
         studentId.displayForm = studentId.displayForm ? false : true;
+        studentId.style = ( studentId.style === plus ) ? close : plus;
 
         this.setState({ 
-            status: true, 
             student: studentId,
         });
     }
@@ -51,7 +57,7 @@ class Student extends Component {
     }
 
     render() { 
-        const { students, student, lessons, style } = this.state;
+        const { students, student, lessons } = this.state;
 
         const myTableThead = {
             textAlign: student.displayForm ? "center" : '',
@@ -133,7 +139,7 @@ class Student extends Component {
                                 <button 
                                     className="btn btn-sm btn-default"
                                     onClick={() => {this.showLesson(student)}}>
-                                    <i className={style} />
+                                    <i className={student.style} />
                                 </button>
                             </td>
                             <td style={myTableTdMid}>{student.first_name + ' ' + student.last_name}</td>
@@ -168,7 +174,12 @@ class Student extends Component {
                                             >
                                             <option selected="true" disabled="disabled">Choose a lesson</option>     
                                             {lessons.map(lesson => ( 
-                                                <option value={lesson.id}>{lesson.lesson_name}</option>
+                                                <option 
+                                                    key={lesson.id} 
+                                                    value={lesson.id}
+                                                >
+                                                    {lesson.lesson_name}
+                                                </option>
                                             ))}
                                             </select>
                                         </div>
