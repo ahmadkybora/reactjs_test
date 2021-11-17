@@ -13,7 +13,7 @@ export const lessonUpdate = async lesson => {
         .then(() => {
             setTimeout(function(){ 
                 window.location.reload();
-            }, 1500);
+            }, 2000);
         })
         .catch(err => Error(err));
 }
@@ -24,7 +24,7 @@ export const lessonDelete = async lesson => {
         .then(() => {
             setTimeout(function(){ 
                 window.location.reload();
-            }, 1500);
+            }, 2000);
         })
         .catch(err => Error(err));
 }

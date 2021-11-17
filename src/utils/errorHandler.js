@@ -7,7 +7,7 @@ export const Success = res => {
         break;
 
         case 201:
-            toast.success(res.data.message);
+            toast.warning(res.data.message);
         break;
     }
 }

@@ -21,9 +21,11 @@ class Student extends Component {
         const students = await getAllStudents();
         const displayForm = false;
         const style = "fa fa-plus text-success";
+        const disabled = false;
         students.map(s => {
             s.displayForm = displayForm; 
-            s.style = style
+            s.style = style;
+            s.disabled = disabled;
         })
         this.setState({ students, lessons });
     }
@@ -34,10 +36,18 @@ class Student extends Component {
         let plus = "fa fa-plus text-success";
         let close = "fa fa-close text-danger";
         const studentId = students.find(s => ( s.id === student.id));
-        studentId.displayForm = studentId.displayForm ? false : true;
-        studentId.style = ( studentId.style === plus ) ? close : plus;
+
+        students.map(st => {
+            if(st.id === student.id) {
+                st.displayForm = st.displayForm ? false : true;
+                st.style = ( st.style === plus ) ? close : plus;
+            } else {
+                st.disabled = st.disabled ? false : true;
+            }
+        });     
 
         this.setState({ 
+            students,
             student: studentId,
         });
     }
@@ -138,6 +148,7 @@ class Student extends Component {
                             <td style={myTableTdSmall}>
                                 <button 
                                     className="btn btn-sm btn-default"
+                                    disabled={student.disabled}
                                     onClick={() => {this.showLesson(student)}}>
                                     <i className={student.style} />
                                 </button>
